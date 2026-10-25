@@ -33,11 +33,29 @@ from app.services.accuracy_engine import AccuracyEngine
 from app.services.elexon_client import elexon_client
 from app.services.insights_engine import InsightsEngine
 
+from contextlib import asynccontextmanager
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
 logger = logging.getLogger("windsight")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Pre-warms Elexon data and runs initial analysis in memory for instant responses."""
+    try:
+        logger.info("Pre-warming WindSight analysis pipeline for January 2026...")
+        await run_pipeline(
+            settings.DEFAULT_DECISION_START,
+            settings.DEFAULT_DECISION_END,
+            settings.DEFAULT_CUTOFF_TIME,
+            settings.DEFAULT_MAPPING_POLICY
+        )
+        logger.info("Pipeline pre-warmed successfully. Sub-millisecond latency ready.")
+    except Exception as e:
+        logger.warning(f"Startup pre-warming non-critical error: {e}")
+    yield
 
 app = FastAPI(
     title=f"{settings.APP_NAME} API",
@@ -49,7 +67,8 @@ app = FastAPI(
     ),
     version=settings.VERSION,
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 app.add_middleware(
@@ -69,21 +88,6 @@ def get_pipeline_lock():
     if _PIPELINE_LOCK is None:
         _PIPELINE_LOCK = asyncio.Lock()
     return _PIPELINE_LOCK
-
-@app.on_event("startup")
-async def startup_prewarm():
-    """Pre-warms Elexon data and runs initial analysis in memory for instant responses."""
-    try:
-        logger.info("Pre-warming WindSight analysis pipeline for January 2026...")
-        await run_pipeline(
-            settings.DEFAULT_DECISION_START,
-            settings.DEFAULT_DECISION_END,
-            settings.DEFAULT_CUTOFF_TIME,
-            settings.DEFAULT_MAPPING_POLICY
-        )
-        logger.info("Pipeline pre-warmed successfully. Sub-millisecond latency ready.")
-    except Exception as e:
-        logger.warning(f"Startup pre-warming non-critical error: {e}")
 
 def get_cache_key(d_from: str, d_to: str, cutoff: str, policy: str) -> str:
     return f"{d_from}|{d_to}|{cutoff}|{policy}"
