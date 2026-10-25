@@ -25,11 +25,8 @@ export const HeaderComponent: React.FC<HeaderProps> = ({
               <Wind className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="flex items-center space-x-2.5">
+              <div className="flex items-center">
                 <span className="text-2xl font-bold tracking-tight text-white">WindSight</span>
-                <span className="text-xs uppercase font-semibold tracking-wider px-2 py-0.5 rounded-full bg-navy-800 text-wind-500 border border-wind-500/30">
-                  Platform
-                </span>
               </div>
               <p className="text-xs text-slate-300 font-medium">
                 Wind Forecast Intelligence Platform
@@ -83,7 +80,6 @@ export const HeaderComponent: React.FC<HeaderProps> = ({
         {/* Supporting Header Banner */}
         <div className="py-2.5 border-t border-navy-800/70 flex flex-col md:flex-row md:items-center justify-between text-xs text-slate-400">
           <div className="flex items-center space-x-2">
-            <span className="font-semibold text-slate-200">Tagline:</span>
             <span className="text-slate-300 italic">
               "See the forecast. Measure the uncertainty. Make smarter energy decisions."
             </span>
