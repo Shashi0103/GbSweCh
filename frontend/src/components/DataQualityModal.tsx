@@ -27,30 +27,30 @@ export const DataQualityModal: React.FC<DataQualityModalProps> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-xs animate-fade-in transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-navy-900/60 backdrop-blur-xs animate-fade-in transition-opacity"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-2xl border border-slate-200/90 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-modal-pop"
+        className="bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 max-w-2xl w-full max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-modal-pop"
       >
         {/* Header */}
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+        <div className="p-3.5 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-lg bg-emerald-600 text-white shadow-xs">
-              <ShieldCheck className="w-5 h-5" />
+            <div className="p-2 rounded-lg bg-emerald-600 text-white shadow-xs shrink-0">
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight">
-                Data Quality, Lineage & Matching Diagnostics
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
+                Data Quality & Lineage Diagnostics
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-[11px] sm:text-xs text-slate-500">
                 Auditing official Elexon FUELHH and WINDFOR streams and match rates.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/80 active:scale-95 transition-all cursor-pointer"
+            className="p-2 sm:p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/80 active:scale-95 transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
             title="Close (Esc)"
           >
             <X className="w-5 h-5" />
@@ -58,12 +58,12 @@ export const DataQualityModal: React.FC<DataQualityModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto space-y-5 text-xs text-slate-700">
+        <div className="p-3.5 sm:p-6 overflow-y-auto space-y-4 sm:space-y-5 text-xs text-slate-700">
           {/* Main Quality Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-              <div className="text-slate-500 text-[11px] font-medium mb-1">FUELHH Actuals:</div>
-              <div className="text-lg font-bold text-slate-900 font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+            <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="text-slate-500 text-[10px] sm:text-[11px] font-medium mb-1 truncate">FUELHH Actuals:</div>
+              <div className="text-base sm:text-lg font-bold text-slate-900 font-mono">
                 {dataQuality.actualRecordsRetrieved.toLocaleString()}
               </div>
               <div className="text-[10px] text-slate-400">WIND fuelType records</div>

@@ -100,14 +100,14 @@ export const ErrorChartComponent: React.FC<ErrorChartProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs mb-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-2 border-b border-slate-100 gap-2">
+    <div className="bg-white rounded-xl p-3.5 sm:p-5 border border-slate-200/80 shadow-xs mb-4 sm:mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 sm:pb-4 mb-2 border-b border-slate-100 gap-2.5">
         <div>
           <h2 className="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-navy-800" />
+            <BarChart3 className="w-4 h-4 text-navy-800 shrink-0" />
             {viewMode === 'signed' ? 'Forecast Signed Error Over Time' : 'Diurnal Uncertainty Profile (Hour of Day)'}
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
             {viewMode === 'signed'
               ? 'Sign convention: Actual − Forecast. Negative = Overforecasting, Positive = Underforecasting.'
               : 'Average Mean Absolute Error (MAE) categorized by delivery hour (00:00 to 23:00 UTC).'}
@@ -115,26 +115,26 @@ export const ErrorChartComponent: React.FC<ErrorChartProps> = ({
         </div>
 
         {/* View Mode Toggle */}
-        <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs font-medium">
+        <div className="flex items-center bg-slate-100 p-1 rounded-lg text-xs font-medium w-full sm:w-auto">
           <button
             onClick={() => setViewMode('signed')}
-            className={`px-3 py-1 rounded-md transition-all ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 sm:py-1 rounded-md min-h-[32px] sm:min-h-0 flex items-center justify-center transition-all ${
               viewMode === 'signed'
                 ? 'bg-white text-navy-900 shadow-xs font-semibold'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Signed Error (Time-Series)
+            Signed Error
           </button>
           <button
             onClick={() => setViewMode('diurnal')}
-            className={`px-3 py-1 rounded-md transition-all ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 sm:py-1 rounded-md min-h-[32px] sm:min-h-0 flex items-center justify-center transition-all ${
               viewMode === 'diurnal'
                 ? 'bg-white text-navy-900 shadow-xs font-semibold'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Diurnal Profile (By Hour)
+            Diurnal Profile
           </button>
         </div>
       </div>

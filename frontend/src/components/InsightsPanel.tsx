@@ -43,15 +43,15 @@ export const InsightsPanelComponent: React.FC<InsightsPanelProps> = ({ insightsD
   };
 
   return (
-    <div className="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs mb-6">
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+    <div className="bg-white rounded-xl p-3.5 sm:p-5 border border-slate-200/80 shadow-xs mb-4 sm:mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3.5 sm:mb-4 pb-3 border-b border-slate-100 gap-1 sm:gap-0">
         <div className="flex items-center space-x-2">
-          <Lightbulb className="w-5 h-5 text-amber-500" />
+          <Lightbulb className="w-5 h-5 text-amber-500 shrink-0" />
           <h2 className="text-base font-bold text-slate-900 tracking-tight">
             Key Analytical Intelligence & Findings
           </h2>
         </div>
-        <span className="text-xs text-slate-400">
+        <span className="text-[11px] sm:text-xs text-slate-400">
           Derived quantitatively from verified Elexon observations
         </span>
       </div>

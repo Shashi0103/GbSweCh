@@ -67,30 +67,30 @@ export const VintageAuditModal: React.FC<VintageAuditModalProps> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-xs animate-fade-in transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-navy-900/60 backdrop-blur-xs animate-fade-in transition-opacity"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-2xl border border-slate-200/90 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-modal-pop"
+        className="bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 max-w-2xl w-full max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-modal-pop"
       >
         {/* Header */}
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
-          <div className="flex items-center space-x-3">
-            <div className="p-2.5 rounded-xl bg-navy-900 text-wind-500 shadow-xs">
-              <ShieldCheck className="w-5 h-5" />
+        <div className="p-3.5 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+          <div className="flex items-center space-x-2.5 sm:space-x-3">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-navy-900 text-wind-500 shadow-xs shrink-0">
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight">
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
                 Forecast Vintage Selection Audit
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-[11px] sm:text-xs text-slate-500">
                 Auditing eligible forecast selection and future-data leakage prevention.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/80 active:scale-95 transition-all cursor-pointer"
+            className="p-2 sm:p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/80 active:scale-95 transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
             title="Close (Esc)"
           >
             <X className="w-5 h-5" />
@@ -98,7 +98,7 @@ export const VintageAuditModal: React.FC<VintageAuditModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-5">
+        <div className="p-3.5 sm:p-6 overflow-y-auto space-y-4 sm:space-y-5">
           {loading ? (
             /* Sleek skeleton shimmer loader while fetching */
             <div className="space-y-4">
@@ -162,8 +162,8 @@ export const VintageAuditModal: React.FC<VintageAuditModalProps> = ({
                     Target: {data.targetStartTime}
                   </span>
                 </h4>
-                <div className="border border-slate-200 rounded-xl overflow-hidden text-xs shadow-xs">
-                  <table className="w-full text-left border-collapse">
+                <div className="border border-slate-200 rounded-xl overflow-x-auto text-xs shadow-xs">
+                  <table className="w-full text-left border-collapse min-w-[500px]">
                     <thead className="bg-slate-50/90 text-slate-600 font-semibold text-[11px] uppercase border-b border-slate-200">
                       <tr>
                         <th className="py-2.5 px-3.5">Publish Time (UTC)</th>

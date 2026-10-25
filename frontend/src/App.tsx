@@ -174,17 +174,17 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-7">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-7">
         {/* Error Banner if connection fails */}
         {errorMessage && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center justify-between">
+          <div className="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <button
               onClick={loadDashboardData}
-              className="px-3 py-1 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors"
+              className="px-3 py-1 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors cursor-pointer"
             >
               Retry
             </button>
@@ -192,18 +192,18 @@ export const App: React.FC = () => {
         )}
 
         {/* Dashboard Title & Hero Descriptor */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Wind Generation Intelligence
               </h1>
-              <p className="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
                 National UK wind generation forecasts, actual output, and forecast accuracy for day-ahead purchasing decisions.
               </p>
             </div>
             <div className="flex items-center self-start sm:self-auto gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-navy-900 text-wind-500 shadow-xs">
-              <Wind className="w-4 h-4 text-wind-500" />
+              <Wind className="w-4 h-4 text-wind-500 shrink-0" />
               <span>UK National Grid Balancing</span>
             </div>
           </div>
