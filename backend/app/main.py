@@ -192,7 +192,11 @@ async def run_pipeline(
     _ANALYSIS_CACHE[key] = result
     return result
 
-@app.get("/api/health", response_model=HealthResponse, tags=["Health"])
+from fastapi import APIRouter
+
+api_router = APIRouter()
+
+@api_router.get("/health", response_model=HealthResponse, tags=["Health"])
 async def health_check():
     """Returns application health status and Elexon integration diagnostic status."""
     has_fuel_cache = elexon_client.fuelhh_cache_file.exists()
@@ -206,7 +210,7 @@ async def health_check():
         elexonEndpointConfigured=settings.ELEXON_BASE_URL
     )
 
-@app.get("/api/analysis/summary", response_model=SummaryResponse, tags=["Analysis"])
+@api_router.get("/analysis/summary", response_model=SummaryResponse, tags=["Analysis"])
 async def get_analysis_summary(
     decision_date_from: str = Query(settings.DEFAULT_DECISION_START, description="Purchasing decision start date (YYYY-MM-DD)"),
     decision_date_to: str = Query(settings.DEFAULT_DECISION_END, description="Purchasing decision end date (YYYY-MM-DD)"),
@@ -228,7 +232,7 @@ async def get_analysis_summary(
         dataQuality=pipeline["data_quality"]
     )
 
-@app.get("/api/analysis/timeseries", response_model=TimeseriesResponse, tags=["Analysis"])
+@api_router.get("/analysis/timeseries", response_model=TimeseriesResponse, tags=["Analysis"])
 async def get_analysis_timeseries(
     decision_date_from: str = Query(settings.DEFAULT_DECISION_START),
     decision_date_to: str = Query(settings.DEFAULT_DECISION_END),
@@ -265,7 +269,7 @@ async def get_analysis_timeseries(
         points=points
     )
 
-@app.get("/api/analysis/records", response_model=RecordsResponse, tags=["Analysis"])
+@api_router.get("/analysis/records", response_model=RecordsResponse, tags=["Analysis"])
 async def get_analysis_records(
     decision_date_from: str = Query(settings.DEFAULT_DECISION_START),
     decision_date_to: str = Query(settings.DEFAULT_DECISION_END),
@@ -309,7 +313,7 @@ async def get_analysis_records(
         records=page_records
     )
 
-@app.get("/api/analysis/insights", response_model=InsightsResponse, tags=["Analysis"])
+@api_router.get("/analysis/insights", response_model=InsightsResponse, tags=["Analysis"])
 async def get_analysis_insights(
     decision_date_from: str = Query(settings.DEFAULT_DECISION_START),
     decision_date_to: str = Query(settings.DEFAULT_DECISION_END),
@@ -322,7 +326,7 @@ async def get_analysis_insights(
     pipeline = await run_pipeline(decision_date_from, decision_date_to, cutoff_time, mapping_policy)
     return pipeline["insights"]
 
-@app.get("/api/analysis/data-quality", response_model=DataQualitySummary, tags=["Analysis"])
+@api_router.get("/analysis/data-quality", response_model=DataQualitySummary, tags=["Analysis"])
 async def get_data_quality(
     decision_date_from: str = Query(settings.DEFAULT_DECISION_START),
     decision_date_to: str = Query(settings.DEFAULT_DECISION_END),
@@ -335,7 +339,7 @@ async def get_data_quality(
     pipeline = await run_pipeline(decision_date_from, decision_date_to, cutoff_time, mapping_policy)
     return pipeline["data_quality"]
 
-@app.get("/api/analysis/vintages", response_model=VintageInspectionResponse, tags=["Audit"])
+@api_router.get("/analysis/vintages", response_model=VintageInspectionResponse, tags=["Audit"])
 async def inspect_vintages(
     target_start_time: str = Query(..., description="Target delivery interval start time (ISO 8601 UTC)"),
     decision_date_from: str = Query(settings.DEFAULT_DECISION_START),
@@ -369,7 +373,7 @@ async def inspect_vintages(
         rationale=rationale
     )
 
-@app.post("/api/analysis/refresh", tags=["Admin"])
+@api_router.post("/analysis/refresh", tags=["Admin"])
 async def refresh_live_data():
     """Forces a live re-fetch of FUELHH and WINDFOR data from Elexon BMRS API and clears in-memory cache."""
     _ANALYSIS_CACHE.clear()
@@ -383,6 +387,10 @@ async def refresh_live_data():
         "windforCount": len(wind_records),
         "timestamp": elexon_client.last_retrieval_timestamp
     }
+
+# Register routes with both /api prefix and root prefix
+app.include_router(api_router, prefix="/api")
+app.include_router(api_router, prefix="")
 
 # Mount static production frontend
 from fastapi.staticfiles import StaticFiles
