@@ -44,12 +44,14 @@ def test_accuracy_metrics_calculations():
     assert r1.signedError == 200.0
     assert r1.absoluteError == 200.0
     assert r1.biasContribution == -200.0
+    assert r1.absolutePercentageError is not None
     assert round(r1.absolutePercentageError, 1) == 16.7
 
     r2 = next(r for r in matched if r.targetStartTime == "2026-01-02T12:30:00Z")
     assert r2.signedError == -400.0
     assert r2.absoluteError == 400.0
     assert r2.biasContribution == 400.0
+    assert r2.absolutePercentageError is not None
     assert r2.absolutePercentageError == 25.0
 
     # MAE = (200 + 400) / 2 = 300.0 MW
