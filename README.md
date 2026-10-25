@@ -312,30 +312,24 @@ tests/test_forecast_selector.py::test_invalid_timestamps_gracefully_ignored PASS
 
 ---
 
-## 10. Deployment Instructions
+## 10. Deployment & Live URL
 
-### 10.1 Frontend Deployment (Vercel)
-1. Push the repository to GitHub.
-2. In Vercel, import the project and set the Root Directory to `frontend`.
-3. Framework Preset: **Vite**.
-4. Set environment variable: `VITE_API_BASE_URL` pointing to your deployed backend URL.
-5. Deploy. The included `frontend/vercel.json` ensures client-side routing and proxying work out of the box.
+- **Production Live Deployment:** [https://windsight-orpin.vercel.app](https://windsight-orpin.vercel.app)
+- **API Health Check:** [https://windsight-orpin.vercel.app/api/health](https://windsight-orpin.vercel.app/api/health)
+- **Interactive API Docs (Swagger):** [https://windsight-orpin.vercel.app/docs](https://windsight-orpin.vercel.app/docs)
 
-### 10.2 Backend Deployment (Render / Heroku / Fly.io)
-1. Using Docker: Use `backend/Dockerfile` as the deployment target.
-2. Set Environment Variables:
-   - `PORT=8000`
-   - `ELEXON_BASE_URL=https://data.elexon.co.uk/bmrs/api/v1`
-3. Verify the deployment using `curl https://<your-backend-host>/api/health`.
+### Continuous Deployment
+The repository is linked directly to Vercel via GitHub: every push to `main` automatically triggers an automated build and zero-downtime deployment.
 
 ---
 
 ## 11. GitHub Repository & Quick Start
 
-- **Application Name:** **WindSight** (used consistently throughout product UI and documentation).
+- **Application Name:** **WindSight**
 - **GitHub Repository:** [https://github.com/Shashi0103/GbSweCh.git](https://github.com/Shashi0103/GbSweCh.git)
+- **Live Platform:** [https://windsight-orpin.vercel.app](https://windsight-orpin.vercel.app)
 
-### Clone & Run
+### Clone & Run Locally
 ```bash
 git clone https://github.com/Shashi0103/GbSweCh.git
 cd GbSweCh
