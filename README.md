@@ -353,22 +353,4 @@ In compliance with the challenge requirements:
 
 ---
 
-## 13. Verification Matrix
-
-| Feature / Requirement | Challenge Criterion | Verification Status | Evidence |
-| :--- | :--- | :---: | :--- |
-| **FUELHH Stream** | Filter to WIND, 30-min resolution | **Verified Live** | Retrieved 1,584 records for Jan 2026 |
-| **WINDFOR Stream** | Capture startTime and publishTime | **Verified Live** | Retrieved 19,272 candidate forecast records |
-| **Cutoff Policy** | Prevent future-data leakage | **Verified** | `test_forecast_published_after_cutoff_is_rejected` PASSED |
-| **January Boundary** | Jan 31 decision targets Feb 1 delivery | **Verified** | `test_january_boundary_handling_jan31_to_feb1` PASSED |
-| **Accuracy Formulations** | MAE, MAPE, Bias sign, RMSE | **Verified** | `test_accuracy_metrics_calculations` PASSED |
-| **Zero Actual Exclusions** | Exclude 0 MW from MAPE | **Verified** | `test_zero_actual_handling_in_mape` PASSED |
-| **Interactive UI** | React + Vite + Tailwind + Recharts | **Verified** | Browser test recording completed with subagent |
-| **Automated Tests** | Pytest unit and integration suite | **Verified** | 17 of 17 tests passed |
-| **Production Build** | Frontend `npm run build` | **Verified** | Vite bundle built in 15.2s |
-| **Docker Configuration** | Dockerfile & docker-compose.yml | **Verified** | Multi-stage Dockerfiles configured |
-| **Demo Script** | 10-min customer & technical breakdown | **Verified** | `docs/DEMO_SCRIPT.md` created |
-
----
-
 *WindSight — See the forecast. Measure the uncertainty. Make smarter energy decisions.*
