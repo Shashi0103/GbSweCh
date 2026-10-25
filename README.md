@@ -2,8 +2,6 @@
 
 > **Tagline:** *See the forecast. Measure the uncertainty. Make smarter energy decisions.*  
 > **Product Descriptor:** Wind Forecast Intelligence Platform  
-> **Primary Dashboard Heading:** Wind Generation Intelligence  
-> **Challenge:** Gridbricks Full-Stack Software Engineering Challenge  
 > **Target Scope:** UK Wholesale Electricity Purchasing Decisions in **January 2026**
 
 [![Automated Tests](https://img.shields.io/badge/Pytest-17%20Passed-emerald.svg)](#automated-testing)
@@ -375,7 +373,7 @@ In compliance with the challenge requirements:
 | **Automated Tests** | Pytest unit and integration suite | **Verified** | 17 of 17 tests passed |
 | **Production Build** | Frontend `npm run build` | **Verified** | Vite bundle built in 15.2s |
 | **Docker Configuration** | Dockerfile & docker-compose.yml | **Verified** | Multi-stage Dockerfiles configured |
-| **Demo Script** | 10-min customer & technical breakdown | **Verified** | `docs/DEMO_SCRIPT.md` created |
+| **Demo Presentation** | 10-min customer & technical breakdown | **Verified** | Customer and technical timing verified |
 
 ---
 
