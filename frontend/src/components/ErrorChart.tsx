@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -10,7 +10,7 @@ import {
   ReferenceLine,
   Cell,
 } from 'recharts';
-import { BarChart3, Clock, AlertCircle } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import { TimeseriesPoint } from '../types';
 
 interface ErrorChartProps {
@@ -19,12 +19,32 @@ interface ErrorChartProps {
   isLoading: boolean;
 }
 
-export const ErrorChart: React.FC<ErrorChartProps> = ({
+export const ErrorChartComponent: React.FC<ErrorChartProps> = ({
   points,
   diurnalProfile,
   isLoading,
 }) => {
   const [viewMode, setViewMode] = useState<'signed' | 'diurnal'>('signed');
+
+  // Memoize formatted data with intelligent sampling for ultra-fast 60fps rendering
+  const signedData = useMemo(() => {
+    // If more than 200 points, sample gracefully for the overview bar chart so browser SVG doesn't lag
+    const step = points.length > 250 ? Math.ceil(points.length / 150) : 1;
+    const result = [];
+    for (let i = 0; i < points.length; i += step) {
+      const p = points[i];
+      const d = new Date(p.targetStartTime);
+      const dateLabel = `${d.getUTCMonth() + 1}/${d.getUTCDate()} ${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
+      result.push({
+        time: dateLabel,
+        fullTime: p.targetStartTime,
+        settlementPeriod: p.settlementPeriod,
+        signedError: p.signedError,
+        isOverforecast: (p.signedError ?? 0) < 0,
+      });
+    }
+    return result;
+  }, [points]);
 
   if (isLoading) {
     return (
@@ -33,19 +53,6 @@ export const ErrorChart: React.FC<ErrorChartProps> = ({
       </div>
     );
   }
-
-  // Format signed error data
-  const signedData = points.map((p) => {
-    const d = new Date(p.targetStartTime);
-    const dateLabel = `${d.getUTCMonth() + 1}/${d.getUTCDate()} ${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
-    return {
-      time: dateLabel,
-      fullTime: p.targetStartTime,
-      settlementPeriod: p.settlementPeriod,
-      signedError: p.signedError,
-      isOverforecast: (p.signedError ?? 0) < 0,
-    };
-  });
 
   const SignedTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -152,7 +159,7 @@ export const ErrorChart: React.FC<ErrorChartProps> = ({
               />
               <Tooltip content={<SignedTooltip />} />
               <ReferenceLine y={0} stroke="#475569" strokeWidth={1.5} />
-              <Bar dataKey="signedError" name="Signed Error (MW)" maxBarSize={6}>
+              <Bar dataKey="signedError" name="Signed Error (MW)" maxBarSize={6} isAnimationActive={false}>
                 {signedData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
@@ -179,7 +186,7 @@ export const ErrorChart: React.FC<ErrorChartProps> = ({
                 tickFormatter={(v) => `${v.toLocaleString()} MW`}
               />
               <Tooltip content={<DiurnalTooltip />} />
-              <Bar dataKey="mae" name="Average MAE (MW)" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={28} />
+              <Bar dataKey="mae" name="Average MAE (MW)" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         )}
@@ -203,3 +210,5 @@ export const ErrorChart: React.FC<ErrorChartProps> = ({
     </div>
   );
 };
+
+export const ErrorChart = React.memo(ErrorChartComponent);

@@ -8,7 +8,7 @@ interface FilterBarProps {
   isLoading: boolean;
 }
 
-export const FilterBar: React.FC<FilterBarProps> = ({
+export const FilterBarComponent: React.FC<FilterBarProps> = ({
   filters,
   onChange,
   isLoading,
@@ -214,3 +214,5 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     </div>
   );
 };
+
+export const FilterBar = React.memo(FilterBarComponent);

@@ -29,7 +29,7 @@ interface DataTableProps {
   isLoading: boolean;
 }
 
-export const DataTable: React.FC<DataTableProps> = ({
+export const DataTableComponent: React.FC<DataTableProps> = ({
   recordsData,
   page,
   pageSize,
@@ -390,3 +390,5 @@ export const DataTable: React.FC<DataTableProps> = ({
     </div>
   );
 };
+
+export const DataTable = React.memo(DataTableComponent);

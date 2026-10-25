@@ -7,7 +7,7 @@ interface SummaryMetricsProps {
   isLoading: boolean;
 }
 
-export const SummaryMetrics: React.FC<SummaryMetricsProps> = ({ metrics, isLoading }) => {
+export const SummaryMetricsComponent: React.FC<SummaryMetricsProps> = ({ metrics, isLoading }) => {
   if (isLoading || !metrics) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -182,3 +182,5 @@ export const SummaryMetrics: React.FC<SummaryMetricsProps> = ({ metrics, isLoadi
     </div>
   );
 };
+
+export const SummaryMetrics = React.memo(SummaryMetricsComponent);

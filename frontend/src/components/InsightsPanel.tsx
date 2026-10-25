@@ -7,7 +7,7 @@ interface InsightsPanelProps {
   isLoading: boolean;
 }
 
-export const InsightsPanel: React.FC<InsightsPanelProps> = ({ insightsData, isLoading }) => {
+export const InsightsPanelComponent: React.FC<InsightsPanelProps> = ({ insightsData, isLoading }) => {
   if (isLoading || !insightsData) {
     return (
       <div className="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs mb-6 animate-pulse">
@@ -107,3 +107,5 @@ export const InsightsPanel: React.FC<InsightsPanelProps> = ({ insightsData, isLo
     </div>
   );
 };
+
+export const InsightsPanel = React.memo(InsightsPanelComponent);

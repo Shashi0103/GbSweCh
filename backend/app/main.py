@@ -1,3 +1,4 @@
+import asyncio
 from datetime import date, datetime, timedelta, timezone
 from typing import Dict, List, Optional
 import logging
@@ -52,6 +53,28 @@ app.add_middleware(
 
 # In-memory memoization cache for pipeline runs to guarantee sub-millisecond response times
 _ANALYSIS_CACHE: Dict[str, dict] = {}
+_PIPELINE_LOCK = None
+
+def get_pipeline_lock():
+    global _PIPELINE_LOCK
+    if _PIPELINE_LOCK is None:
+        _PIPELINE_LOCK = asyncio.Lock()
+    return _PIPELINE_LOCK
+
+@app.on_event("startup")
+async def startup_prewarm():
+    """Pre-warms Elexon data and runs initial analysis in memory for instant responses."""
+    try:
+        logger.info("Pre-warming WindSight analysis pipeline for January 2026...")
+        await run_pipeline(
+            settings.DEFAULT_DECISION_START,
+            settings.DEFAULT_DECISION_END,
+            settings.DEFAULT_CUTOFF_TIME,
+            settings.DEFAULT_MAPPING_POLICY
+        )
+        logger.info("Pipeline pre-warmed successfully. Sub-millisecond latency ready.")
+    except Exception as e:
+        logger.warning(f"Startup pre-warming non-critical error: {e}")
 
 def get_cache_key(d_from: str, d_to: str, cutoff: str, policy: str) -> str:
     return f"{d_from}|{d_to}|{cutoff}|{policy}"
@@ -66,6 +89,12 @@ async def run_pipeline(
     key = get_cache_key(d_from_str, d_to_str, cutoff_time, mapping_policy)
     if not force_live and key in _ANALYSIS_CACHE:
         return _ANALYSIS_CACHE[key]
+
+    lock = get_pipeline_lock()
+    async with lock:
+        # Check again under lock in case another request already calculated it
+        if not force_live and key in _ANALYSIS_CACHE:
+            return _ANALYSIS_CACHE[key]
 
     try:
         d_from = dt_parser.parse(d_from_str).date()

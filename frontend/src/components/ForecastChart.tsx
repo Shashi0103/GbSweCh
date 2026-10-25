@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -18,8 +18,27 @@ interface ForecastChartProps {
   isLoading: boolean;
 }
 
-export const ForecastChart: React.FC<ForecastChartProps> = ({ points, isLoading }) => {
+export const ForecastChartComponent: React.FC<ForecastChartProps> = ({ points, isLoading }) => {
   const [showBrush, setShowBrush] = useState(true);
+
+  // Memoize formatted chart points to avoid recalculation on unrelated renders
+  const chartData = useMemo(() => {
+    return points.map((p) => {
+      const d = new Date(p.targetStartTime);
+      const dateLabel = `${d.getUTCMonth() + 1}/${d.getUTCDate()} ${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
+      return {
+        time: dateLabel,
+        fullTime: p.targetStartTime,
+        settlementDate: p.settlementDate,
+        settlementPeriod: p.settlementPeriod,
+        decisionDate: p.decisionDate,
+        actual: p.actualGeneration,
+        forecast: p.forecastGeneration,
+        signedError: p.signedError,
+        absError: p.absoluteError,
+      };
+    });
+  }, [points]);
 
   if (isLoading) {
     return (
@@ -29,24 +48,7 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({ points, isLoading 
     );
   }
 
-  // Format point for charting
-  const chartData = points.map((p) => {
-    const d = new Date(p.targetStartTime);
-    const dateLabel = `${d.getUTCMonth() + 1}/${d.getUTCDate()} ${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
-    return {
-      time: dateLabel,
-      fullTime: p.targetStartTime,
-      settlementDate: p.settlementDate,
-      settlementPeriod: p.settlementPeriod,
-      decisionDate: p.decisionDate,
-      actual: p.actualGeneration,
-      forecast: p.forecastGeneration,
-      signedError: p.signedError,
-      absError: p.absoluteError,
-    };
-  });
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       const actual = data.actual;
@@ -160,8 +162,9 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({ points, isLoading 
               stroke="#059669"
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 5 }}
+              activeDot={{ r: 4 }}
               connectNulls={false}
+              isAnimationActive={false}
             />
             <Line
               type="monotone"
@@ -171,8 +174,9 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({ points, isLoading 
               strokeWidth={2}
               strokeDasharray="4 3"
               dot={false}
-              activeDot={{ r: 5 }}
+              activeDot={{ r: 4 }}
               connectNulls={false}
+              isAnimationActive={false}
             />
             {showBrush && (
               <Brush
@@ -190,3 +194,5 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({ points, isLoading 
     </div>
   );
 };
+
+export const ForecastChart = React.memo(ForecastChartComponent);

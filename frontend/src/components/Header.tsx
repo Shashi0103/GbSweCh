@@ -9,7 +9,7 @@ interface HeaderProps {
   isRefreshing: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({
+export const HeaderComponent: React.FC<HeaderProps> = ({
   dataQuality,
   onOpenDataQuality,
   onRefreshData,
@@ -96,3 +96,5 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+
+export const Header = React.memo(HeaderComponent);

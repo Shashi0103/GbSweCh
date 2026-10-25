@@ -19,26 +19,34 @@ class ElexonClient:
         self.windfor_cache_file = self.data_dir / "cache_windfor_jan2026.json"
         self.last_fetch_status: str = "uninitialized"
         self.last_retrieval_timestamp: str = datetime.now(timezone.utc).isoformat()
+        self._fuelhh_mem_cache: Optional[List[dict]] = None
+        self._windfor_mem_cache: Optional[List[dict]] = None
 
     def load_cached_fuelhh(self) -> List[dict]:
-        """Loads cached FUELHH wind records from disk."""
+        """Loads cached FUELHH wind records (in-memory memoized)."""
+        if self._fuelhh_mem_cache is not None:
+            return self._fuelhh_mem_cache
         if self.fuelhh_cache_file.exists():
             try:
                 with open(self.fuelhh_cache_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    logger.info(f"Loaded {len(data)} cached FUELHH wind records.")
+                    self._fuelhh_mem_cache = data
+                    logger.info(f"Loaded {len(data)} cached FUELHH wind records into memory.")
                     return data
             except Exception as e:
                 logger.error(f"Error reading FUELHH cache: {e}")
         return []
 
     def load_cached_windfor(self) -> List[dict]:
-        """Loads cached WINDFOR records from disk."""
+        """Loads cached WINDFOR records (in-memory memoized)."""
+        if self._windfor_mem_cache is not None:
+            return self._windfor_mem_cache
         if self.windfor_cache_file.exists():
             try:
                 with open(self.windfor_cache_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    logger.info(f"Loaded {len(data)} cached WINDFOR records.")
+                    self._windfor_mem_cache = data
+                    logger.info(f"Loaded {len(data)} cached WINDFOR records into memory.")
                     return data
             except Exception as e:
                 logger.error(f"Error reading WINDFOR cache: {e}")

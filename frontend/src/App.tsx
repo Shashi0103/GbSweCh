@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Header,
-} from './components/Header';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { Header } from './components/Header';
 import { FilterBar } from './components/FilterBar';
 import { SummaryMetrics } from './components/SummaryMetrics';
 import { InsightsPanel } from './components/InsightsPanel';
@@ -59,7 +57,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Fetch summary, timeseries, and insights when filters change
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setIsLoading(true);
     setErrorMessage(null);
     try {
@@ -79,10 +77,10 @@ export const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filters]);
 
   // Fetch paginated table records
-  const loadRecordsData = async () => {
+  const loadRecordsData = useCallback(async () => {
     setIsTableLoading(true);
     try {
       const res = await fetchRecords(filters, page, pageSize, sortBy, sortOrder, statusFilter);
@@ -92,18 +90,18 @@ export const App: React.FC = () => {
     } finally {
       setIsTableLoading(false);
     }
-  };
+  }, [filters, page, pageSize, sortBy, sortOrder, statusFilter]);
 
   useEffect(() => {
     loadDashboardData();
     setPage(1); // Reset to page 1 on filter change
-  }, [filters]);
+  }, [loadDashboardData]);
 
   useEffect(() => {
     loadRecordsData();
-  }, [filters, page, pageSize, sortBy, sortOrder, statusFilter]);
+  }, [loadRecordsData]);
 
-  const handleRefreshData = async () => {
+  const handleRefreshData = useCallback(async () => {
     setIsRefreshing(true);
     try {
       await refreshLiveData();
@@ -114,23 +112,63 @@ export const App: React.FC = () => {
     } finally {
       setIsRefreshing(false);
     }
-  };
+  }, [loadDashboardData, loadRecordsData]);
 
-  const handleSortChange = (col: string) => {
-    if (sortBy === col) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(col);
-      setSortOrder('asc');
-    }
-  };
+  const handleSortChange = useCallback((col: string) => {
+    setSortBy((prevSortBy) => {
+      if (prevSortBy === col) {
+        setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+        return col;
+      } else {
+        setSortOrder('asc');
+        return col;
+      }
+    });
+  }, []);
+
+  const handlePageChange = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
+  const handlePageSizeChange = useCallback((newSize: number) => {
+    setPageSize(newSize);
+    setPage(1);
+  }, []);
+
+  const handleStatusFilterChange = useCallback((status?: string) => {
+    setStatusFilter(status);
+    setPage(1);
+  }, []);
+
+  const handleAuditVintage = useCallback((targetStartTime: string) => {
+    setAuditTargetStartTime(targetStartTime);
+  }, []);
+
+  const handleCloseAudit = useCallback(() => {
+    setAuditTargetStartTime(null);
+  }, []);
+
+  const handleOpenDataQuality = useCallback(() => {
+    setIsDataQualityOpen(true);
+  }, []);
+
+  const handleCloseDataQuality = useCallback(() => {
+    setIsDataQualityOpen(false);
+  }, []);
+
+  const handleFilterChange = useCallback((updated: FilterState) => {
+    setFilters(updated);
+  }, []);
+
+  // Memoize timeseries points array reference
+  const timeseriesPoints = useMemo(() => timeseriesData?.points || [], [timeseriesData]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       {/* Top Application Header */}
       <Header
         dataQuality={summaryData?.dataQuality}
-        onOpenDataQuality={() => setIsDataQualityOpen(true)}
+        onOpenDataQuality={handleOpenDataQuality}
         onRefreshData={handleRefreshData}
         isRefreshing={isRefreshing}
       />
@@ -172,7 +210,7 @@ export const App: React.FC = () => {
         </div>
 
         {/* Filter & Cutoff Configuration Bar */}
-        <FilterBar filters={filters} onChange={setFilters} isLoading={isLoading} />
+        <FilterBar filters={filters} onChange={handleFilterChange} isLoading={isLoading} />
 
         {/* Summary Metric Cards */}
         <SummaryMetrics metrics={summaryData?.metrics} isLoading={isLoading} />
@@ -182,13 +220,13 @@ export const App: React.FC = () => {
 
         {/* Main Forecast vs Actual Chart */}
         <ForecastChart
-          points={timeseriesData?.points || []}
+          points={timeseriesPoints}
           isLoading={isLoading}
         />
 
         {/* Signed Error & Diurnal Uncertainty Profile */}
         <ErrorChart
-          points={timeseriesData?.points || []}
+          points={timeseriesPoints}
           diurnalProfile={insightsData?.diurnalProfile}
           isLoading={isLoading}
         />
@@ -201,11 +239,11 @@ export const App: React.FC = () => {
           sortBy={sortBy}
           sortOrder={sortOrder}
           statusFilter={statusFilter}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
           onSortChange={handleSortChange}
-          onStatusFilterChange={setStatusFilter}
-          onAuditVintage={(ts) => setAuditTargetStartTime(ts)}
+          onStatusFilterChange={handleStatusFilterChange}
+          onAuditVintage={handleAuditVintage}
           isLoading={isTableLoading}
         />
       </main>
@@ -214,14 +252,14 @@ export const App: React.FC = () => {
       <VintageAuditModal
         targetStartTime={auditTargetStartTime}
         filters={filters}
-        onClose={() => setAuditTargetStartTime(null)}
+        onClose={handleCloseAudit}
       />
 
       {/* Data Quality Diagnostics Modal */}
       <DataQualityModal
         dataQuality={summaryData?.dataQuality}
         isOpen={isDataQualityOpen}
-        onClose={() => setIsDataQualityOpen(false)}
+        onClose={handleCloseDataQuality}
       />
 
       {/* Application Footer */}
