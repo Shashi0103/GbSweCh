@@ -15,23 +15,42 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from dateutil import parser as dt_parser
 
-from app.core.config import settings
-from app.models.schemas import (
-    DataQualitySummary,
-    HealthResponse,
-    InsightsResponse,
-    IntervalRecord,
-    RecordsResponse,
-    SummaryMetrics,
-    SummaryResponse,
-    TimeseriesPoint,
-    TimeseriesResponse,
-    VintageInspectionResponse,
-    VintageRecord,
-)
-from app.services.accuracy_engine import AccuracyEngine
-from app.services.elexon_client import elexon_client
-from app.services.insights_engine import InsightsEngine
+try:
+    from backend.app.core.config import settings
+    from backend.app.models.schemas import (
+        DataQualitySummary,
+        HealthResponse,
+        InsightsResponse,
+        IntervalRecord,
+        RecordsResponse,
+        SummaryMetrics,
+        SummaryResponse,
+        TimeseriesPoint,
+        TimeseriesResponse,
+        VintageInspectionResponse,
+        VintageRecord,
+    )
+    from backend.app.services.accuracy_engine import AccuracyEngine
+    from backend.app.services.elexon_client import elexon_client
+    from backend.app.services.insights_engine import InsightsEngine
+except ModuleNotFoundError:
+    from app.core.config import settings
+    from app.models.schemas import (
+        DataQualitySummary,
+        HealthResponse,
+        InsightsResponse,
+        IntervalRecord,
+        RecordsResponse,
+        SummaryMetrics,
+        SummaryResponse,
+        TimeseriesPoint,
+        TimeseriesResponse,
+        VintageInspectionResponse,
+        VintageRecord,
+    )
+    from app.services.accuracy_engine import AccuracyEngine
+    from app.services.elexon_client import elexon_client
+    from app.services.insights_engine import InsightsEngine
 
 from contextlib import asynccontextmanager
 

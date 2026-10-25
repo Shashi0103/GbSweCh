@@ -1,6 +1,10 @@
 from datetime import date, datetime, timezone
 import pytest
-from app.services.forecast_selector import ForecastSelector
+
+try:
+    from backend.app.services.forecast_selector import ForecastSelector
+except ModuleNotFoundError:
+    from app.services.forecast_selector import ForecastSelector
 
 def test_forecast_published_before_cutoff_is_eligible():
     selector = ForecastSelector(cutoff_time="12:00:00", mapping_policy="exact")

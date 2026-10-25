@@ -2,7 +2,10 @@ from collections import defaultdict
 from typing import Dict, List
 import logging
 
-from app.models.schemas import InsightItem, InsightsResponse, IntervalRecord, SummaryMetrics
+try:
+    from backend.app.models.schemas import InsightItem, InsightsResponse, IntervalRecord, SummaryMetrics
+except ModuleNotFoundError:
+    from app.models.schemas import InsightItem, InsightsResponse, IntervalRecord, SummaryMetrics
 
 logger = logging.getLogger(__name__)
 

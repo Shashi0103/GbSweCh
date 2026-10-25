@@ -1,6 +1,10 @@
 from datetime import date
 import pytest
-from app.services.accuracy_engine import AccuracyEngine
+
+try:
+    from backend.app.services.accuracy_engine import AccuracyEngine
+except ModuleNotFoundError:
+    from app.services.accuracy_engine import AccuracyEngine
 
 def test_accuracy_metrics_calculations():
     engine = AccuracyEngine(cutoff_time="12:00:00", mapping_policy="exact")

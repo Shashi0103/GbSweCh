@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import httpx
 
-from app.core.config import settings
+try:
+    from backend.app.core.config import settings
+except ModuleNotFoundError:
+    from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 

@@ -3,12 +3,20 @@ from datetime import date, datetime, timedelta, timezone
 from typing import Dict, List, Optional, Tuple
 import logging
 
-from app.models.schemas import IntervalRecord, SummaryMetrics, DataQualitySummary
-from app.services.forecast_selector import (
-    ForecastSelector,
-    format_utc_timestamp,
-    parse_utc_timestamp,
-)
+try:
+    from backend.app.models.schemas import IntervalRecord, SummaryMetrics, DataQualitySummary
+    from backend.app.services.forecast_selector import (
+        ForecastSelector,
+        format_utc_timestamp,
+        parse_utc_timestamp,
+    )
+except ModuleNotFoundError:
+    from app.models.schemas import IntervalRecord, SummaryMetrics, DataQualitySummary
+    from app.services.forecast_selector import (
+        ForecastSelector,
+        format_utc_timestamp,
+        parse_utc_timestamp,
+    )
 
 logger = logging.getLogger(__name__)
 

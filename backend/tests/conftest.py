@@ -7,8 +7,10 @@ if _backend_dir not in sys.path:
     sys.path.insert(0, _backend_dir)
 
 import pytest
-from datetime import date, datetime, timezone
-from app.models.schemas import IntervalRecord
+try:
+    from backend.app.models.schemas import IntervalRecord
+except ModuleNotFoundError:
+    from app.models.schemas import IntervalRecord
 
 @pytest.fixture
 def sample_raw_forecasts():

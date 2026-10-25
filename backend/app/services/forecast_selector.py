@@ -4,7 +4,10 @@ from collections import defaultdict
 import logging
 from dateutil import parser as dt_parser
 
-from app.models.schemas import VintageRecord, VintageInspectionResponse
+try:
+    from backend.app.models.schemas import VintageRecord, VintageInspectionResponse
+except ModuleNotFoundError:
+    from app.models.schemas import VintageRecord, VintageInspectionResponse
 
 logger = logging.getLogger(__name__)
 
