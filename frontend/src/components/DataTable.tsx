@@ -331,10 +331,10 @@ export const DataTableComponent: React.FC<DataTableProps> = ({
                     <td className="py-2.5 px-3 text-center">
                       <button
                         onClick={() => onAuditVintage(r.targetStartTime)}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-100 hover:bg-navy-900 hover:text-white text-slate-600 text-[11px] font-medium transition-colors"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-navy-900 hover:text-white hover:shadow-sm text-slate-700 active:scale-90 text-[11px] font-semibold transition-all duration-150 cursor-pointer group"
                         title="Audit all candidate forecast vintages for this interval"
                       >
-                        <Eye className="w-3 h-3" />
+                        <Eye className="w-3.5 h-3.5 text-slate-500 group-hover:text-wind-500 transition-colors" />
                         <span>Audit</span>
                       </button>
                     </td>
