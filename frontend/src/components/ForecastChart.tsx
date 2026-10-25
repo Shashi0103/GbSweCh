@@ -130,66 +130,73 @@ export const ForecastChartComponent: React.FC<ForecastChartProps> = ({ points, i
       </div>
 
       <div className="h-72 sm:h-80 w-full pt-2">
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 10, right: 15, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-            <XAxis
-              dataKey="time"
-              tick={{ fontSize: 11, fill: '#64748b' }}
-              tickLine={false}
-              axisLine={{ stroke: '#cbd5e1' }}
-              minTickGap={45}
-            />
-            <YAxis
-              tick={{ fontSize: 11, fill: '#64748b' }}
-              tickLine={false}
-              axisLine={{ stroke: '#cbd5e1' }}
-              tickFormatter={(v) => `${(v / 1000).toFixed(0)}k MW`}
-              domain={[0, 'auto']}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              verticalAlign="top"
-              align="right"
-              iconType="circle"
-              wrapperStyle={{ paddingBottom: '12px', fontSize: '12px' }}
-            />
-            {/* Critical requirement: connectNulls={false} to avoid misleading connections across missing intervals */}
-            <Line
-              type="monotone"
-              dataKey="actual"
-              name="Actual Wind Generation (FUELHH)"
-              stroke="#059669"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              connectNulls={false}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="forecast"
-              name="Selected Day-Ahead Forecast (WINDFOR)"
-              stroke="#2563EB"
-              strokeWidth={2}
-              strokeDasharray="4 3"
-              dot={false}
-              activeDot={{ r: 4 }}
-              connectNulls={false}
-              isAnimationActive={false}
-            />
-            {showBrush && (
-              <Brush
+        {chartData.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-slate-400 text-xs">
+            <Activity className="w-8 h-8 text-slate-300 mb-2" />
+            <span>No timeseries intervals available for this date selection.</span>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData} margin={{ top: 10, right: 15, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis
                 dataKey="time"
-                height={26}
-                stroke="#94a3b8"
-                fill="#f8fafc"
-                startIndex={0}
-                endIndex={Math.min(chartData.length - 1, 96)}
+                tick={{ fontSize: 11, fill: '#64748b' }}
+                tickLine={false}
+                axisLine={{ stroke: '#cbd5e1' }}
+                minTickGap={45}
               />
-            )}
-          </ComposedChart>
-        </ResponsiveContainer>
+              <YAxis
+                tick={{ fontSize: 11, fill: '#64748b' }}
+                tickLine={false}
+                axisLine={{ stroke: '#cbd5e1' }}
+                tickFormatter={(v) => `${(v / 1000).toFixed(0)}k MW`}
+                domain={[0, 'auto']}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                verticalAlign="top"
+                align="right"
+                iconType="circle"
+                wrapperStyle={{ paddingBottom: '12px', fontSize: '12px' }}
+              />
+              {/* Critical requirement: connectNulls={false} to avoid misleading connections across missing intervals */}
+              <Line
+                type="monotone"
+                dataKey="actual"
+                name="Actual Wind Generation (FUELHH)"
+                stroke="#059669"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4 }}
+                connectNulls={false}
+                isAnimationActive={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="forecast"
+                name="Selected Day-Ahead Forecast (WINDFOR)"
+                stroke="#2563EB"
+                strokeWidth={2}
+                strokeDasharray="4 3"
+                dot={false}
+                activeDot={{ r: 4 }}
+                connectNulls={false}
+                isAnimationActive={false}
+              />
+              {showBrush && chartData.length > 1 && (
+                <Brush
+                  dataKey="time"
+                  height={26}
+                  stroke="#94a3b8"
+                  fill="#f8fafc"
+                  startIndex={0}
+                  endIndex={Math.min(chartData.length - 1, 96)}
+                />
+              )}
+            </ComposedChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

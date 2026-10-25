@@ -141,54 +141,66 @@ export const ErrorChartComponent: React.FC<ErrorChartProps> = ({
 
       <div className="h-64 w-full pt-2">
         {viewMode === 'signed' ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={signedData} margin={{ top: 10, right: 15, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-              <XAxis
-                dataKey="time"
-                tick={{ fontSize: 11, fill: '#64748b' }}
-                tickLine={false}
-                axisLine={{ stroke: '#cbd5e1' }}
-                minTickGap={45}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: '#64748b' }}
-                tickLine={false}
-                axisLine={{ stroke: '#cbd5e1' }}
-                tickFormatter={(v) => `${(v / 1000).toFixed(0)}k MW`}
-              />
-              <Tooltip content={<SignedTooltip />} />
-              <ReferenceLine y={0} stroke="#475569" strokeWidth={1.5} />
-              <Bar dataKey="signedError" name="Signed Error (MW)" maxBarSize={6} isAnimationActive={false}>
-                {signedData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.isOverforecast ? '#F59E0B' : '#3B82F6'}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          signedData.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-slate-400 text-xs">
+              No error distribution data available for this range.
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={signedData} margin={{ top: 10, right: 15, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                <XAxis
+                  dataKey="time"
+                  tick={{ fontSize: 11, fill: '#64748b' }}
+                  tickLine={false}
+                  axisLine={{ stroke: '#cbd5e1' }}
+                  minTickGap={45}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: '#64748b' }}
+                  tickLine={false}
+                  axisLine={{ stroke: '#cbd5e1' }}
+                  tickFormatter={(v) => `${(v / 1000).toFixed(0)}k MW`}
+                />
+                <Tooltip content={<SignedTooltip />} />
+                <ReferenceLine y={0} stroke="#475569" strokeWidth={1.5} />
+                <Bar dataKey="signedError" name="Signed Error (MW)" maxBarSize={6} isAnimationActive={false}>
+                  {signedData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.isOverforecast ? '#F59E0B' : '#3B82F6'}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={diurnalProfile || []} margin={{ top: 10, right: 15, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-              <XAxis
-                dataKey="hourLabel"
-                tick={{ fontSize: 11, fill: '#64748b' }}
-                tickLine={false}
-                axisLine={{ stroke: '#cbd5e1' }}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: '#64748b' }}
-                tickLine={false}
-                axisLine={{ stroke: '#cbd5e1' }}
-                tickFormatter={(v) => `${v.toLocaleString()} MW`}
-              />
-              <Tooltip content={<DiurnalTooltip />} />
-              <Bar dataKey="mae" name="Average MAE (MW)" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-            </BarChart>
-          </ResponsiveContainer>
+          !diurnalProfile || diurnalProfile.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-slate-400 text-xs">
+              No diurnal profile calculated for this range.
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={diurnalProfile || []} margin={{ top: 10, right: 15, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                <XAxis
+                  dataKey="hourLabel"
+                  tick={{ fontSize: 11, fill: '#64748b' }}
+                  tickLine={false}
+                  axisLine={{ stroke: '#cbd5e1' }}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: '#64748b' }}
+                  tickLine={false}
+                  axisLine={{ stroke: '#cbd5e1' }}
+                  tickFormatter={(v) => `${v.toLocaleString()} MW`}
+                />
+                <Tooltip content={<DiurnalTooltip />} />
+                <Bar dataKey="mae" name="Average MAE (MW)" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+              </BarChart>
+            </ResponsiveContainer>
+          )
         )}
       </div>
 
