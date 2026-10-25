@@ -360,3 +360,18 @@ async def refresh_live_data():
         "windforCount": len(wind_records),
         "timestamp": elexon_client.last_retrieval_timestamp
     }
+
+# Mount static production frontend
+from fastapi.staticfiles import StaticFiles
+
+_dist_dir = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+if _dist_dir.exists() and (_dist_dir / "index.html").exists():
+    app.mount("/", StaticFiles(directory=str(_dist_dir), html=True), name="frontend")
+else:
+    @app.get("/")
+    async def root_fallback():
+        return {
+            "app": settings.APP_NAME,
+            "version": settings.VERSION,
+            "status": "running"
+        }
