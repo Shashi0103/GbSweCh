@@ -2,13 +2,27 @@
 
 > **Tagline:** *See the forecast. Measure the uncertainty. Make smarter energy decisions.*  
 > **Product Descriptor:** Wind Forecast Intelligence Platform  
-> **Target Scope:** UK Wholesale Electricity Purchasing Decisions in **January 2026**
+> **Target Scope:** UK Wholesale Electricity Purchasing Decisions in **January 2026**  
+> **Live Production URL:** [https://windsight-orpin.vercel.app](https://windsight-orpin.vercel.app)
 
+[![Live Deployment](https://img.shields.io/badge/Live%20Demo-windsight--orpin.vercel.app-059669.svg?logo=vercel)](https://windsight-orpin.vercel.app)
 [![Automated Tests](https://img.shields.io/badge/Pytest-17%20Passed-emerald.svg)](#automated-testing)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI%200.115-blue.svg)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/Frontend-React%2018%20%2B%20TypeScript-61DAFB.svg)](https://react.dev)
 [![Elexon BMRS](https://img.shields.io/badge/Data%20Source-Elexon%20BMRS%20Live-059669.svg)](https://bmrs.elexon.co.uk)
 [![Docker](https://img.shields.io/badge/Container-Docker%20Compose-2496ED.svg)](#docker-and-containerization)
+
+---
+
+## 🌐 Live Application & Production Links
+
+The WindSight platform is fully deployed and accessible in production:
+
+| Service | Production URL | Description |
+| :--- | :--- | :--- |
+| **WindSight Web App** | **[https://windsight-orpin.vercel.app](https://windsight-orpin.vercel.app)** | Full-stack interactive dashboard & analytics platform |
+| **API Health Check** | **[https://windsight-orpin.vercel.app/api/health](https://windsight-orpin.vercel.app/api/health)** | Live backend system health & Elexon status |
+| **Interactive API Docs** | **[https://windsight-orpin.vercel.app/docs](https://windsight-orpin.vercel.app/docs)** | Interactive Swagger / OpenAPI documentation |
 
 ---
 
