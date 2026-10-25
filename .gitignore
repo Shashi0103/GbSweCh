@@ -46,3 +46,8 @@ Thumbs.db
 # IDEs
 .vscode/
 .idea/
+
+# Internal demo scripts (excluded from public repo)
+docs/DEMO_SCRIPT.md
+*DEMO_SCRIPT*.md
+*Demo*.md
