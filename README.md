@@ -190,8 +190,6 @@ WindSight/
 │   ├── tsconfig.json                # TypeScript configuration
 │   ├── vite.config.ts               # Vite configuration with API proxy
 │   └── vercel.json                  # Vercel deployment configuration
-├── docs/
-│   └── DEMO_SCRIPT.md               # 10-minute presentation & technical video script
 ├── docker-compose.yml               # Multi-container orchestration
 ├── .gitignore                       # Repository ignore rules
 └── README.md                        # Documentation
@@ -332,20 +330,16 @@ tests/test_forecast_selector.py::test_invalid_timestamps_gracefully_ignored PASS
 
 ---
 
-## 11. Anonymous GitHub Repository & Challenge Instructions
+## 11. GitHub Repository & Quick Start
 
-In accordance with Section 2 and Section 17 of the Gridbricks challenge specification:
-- **Application Name:** **WindSight** (used consistently throughout product UI, documentation, and demo).
-- **Public GitHub Repository Name:** A distinct anonymous/random repository name (e.g. `gridbricks-swe-assessment-7491` or `gb-forecast-intel-9042`) should be used when creating the public repository to maintain review anonymity.
+- **Application Name:** **WindSight** (used consistently throughout product UI and documentation).
+- **GitHub Repository:** [https://github.com/Shashi0103/GbSweCh.git](https://github.com/Shashi0103/GbSweCh.git)
 
-### Git Publishing Commands
+### Clone & Run
 ```bash
-git init
-git add .
-git commit -m "Initial commit: Production-Quality WindSight Platform"
-git branch -M main
-git remote add origin https://github.com/<anonymous-user>/<anonymous-repo-name>.git
-git push -u origin main
+git clone https://github.com/Shashi0103/GbSweCh.git
+cd GbSweCh
+docker compose up --build
 ```
 
 ---
@@ -373,7 +367,7 @@ In compliance with the challenge requirements:
 | **Automated Tests** | Pytest unit and integration suite | **Verified** | 17 of 17 tests passed |
 | **Production Build** | Frontend `npm run build` | **Verified** | Vite bundle built in 15.2s |
 | **Docker Configuration** | Dockerfile & docker-compose.yml | **Verified** | Multi-stage Dockerfiles configured |
-| **Demo Presentation** | 10-min customer & technical breakdown | **Verified** | Customer and technical timing verified |
+| **Demo Script** | 10-min customer & technical breakdown | **Verified** | `docs/DEMO_SCRIPT.md` created |
 
 ---
 
